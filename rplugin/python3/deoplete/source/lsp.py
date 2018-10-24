@@ -22,6 +22,10 @@ class Source(Base):
         if not self.vim.call('exists', '*lsp#server#add'):
             return []
 
+        if not self.vim.call('luaeval',
+                             'require("lsp.plugin").client.has_started()'):
+            return []
+
         location = {
             'position': {
                 'character': context['complete_position'],
@@ -30,5 +34,16 @@ class Source(Base):
         }
 
         # Todo: Async support
-        return self.vim.call(
+        candidates = self.vim.call(
             'lsp#request', 'textDocument/completion', location)
+
+        for candidate in candidates:
+            word = candidate['word']
+            candidate['word'] = re.sub(r'\([^)]*\)', '', word)
+            candidate['abbr'] = word
+            if isinstance(candidate.get('info', None), str):
+                candidate['info'] = re.sub(r'\n.*', '', candidate['info'])
+            else:
+                candidate['info'] = ''
+
+        return candidates
