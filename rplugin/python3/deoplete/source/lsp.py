@@ -3,7 +3,9 @@
 # AUTHOR: Shougo Matsushita <Shougo.Matsu at gmail.com>
 # =============================================================================
 
-from .base import Base
+import re
+
+from deoplete.source.base import Base
 
 LSP_KINDS = [
     'Text',
@@ -53,40 +55,44 @@ class Source(Base):
                 context['is_async'] = False
                 return self.process_candidates()
             return []
-        else:
-            self.vim.vars['deoplete#source#lsp#_requested'] = False
-            context['is_async'] = True
 
-            location = {
-                # not working sending the buffer
-                # 'textDocument': ''.join(self.vim.current.buffer[:]),
-                'position': {
-                    'character': context['complete_position'],
-                    'line': self.vim.call('line', '.') - 1,
-                }
+        self.vim.vars['deoplete#source#lsp#_requested'] = False
+        context['is_async'] = True
+
+        location = {
+            # not working sending the buffer
+            # 'textDocument': ''.join(self.vim.current.buffer[:]),
+            'position': {
+                'character': context['complete_position'],
+                'line': self.vim.call('line', '.') - 1,
             }
+        }
 
-            self.vim.call('luaeval',
-                          'require("deoplete").request_candidates(_A.arguments, _A.filetype)',
-                          {'arguments': location, 'filetype': context['filetype']})
+        self.vim.call(
+            'luaeval', 'require("deoplete").request_candidates('
+            '_A.arguments, _A.filetype)',
+            {'arguments': location, 'filetype': context['filetype']})
 
-            return []
+        return []
 
     def process_candidates(self):
-        completions = []
-        for rec in self.vim.vars['deoplete#source#lsp#_results']['items']:
+        candidates = []
+        results = self.vim.vars['deoplete#source#lsp#_results']
+        items = results['items'] if isinstance(results, dict) else results
+        for rec in items:
             item = {
+                'word': re.sub(r'\([^)]*\)', '',
+                               rec.get('entryName', rec.get('label'))),
+                'abbr': rec['label'],
                 'dup': 0,
             }
-            item['word'] = rec.get('entryName', rec.get('label'))
-            item['abbr'] = rec['label']
 
             if 'kind' in rec:
-                item['kind'] = LSP_KINDS[rec['kind']]
+                item['kind'] = LSP_KINDS[rec['kind'] - 1]
 
-            if 'detail' in rec:
+            if 'detail' in rec and rec['detail']:
                 item['info'] = rec['detail']
 
-            completions.append(item)
+            candidates.append(item)
 
-        return completions
+        return candidates
