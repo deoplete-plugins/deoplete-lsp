@@ -16,8 +16,3 @@ https://github.com/neovim/neovim/pull/6856
 call lsp#server#add('python', 'pyls')
 call lsp#server#add('rust', ['rustup', 'run', 'stable', 'rls'])
 ```
-
-
-## Todo
-
-* Asynchronous support
