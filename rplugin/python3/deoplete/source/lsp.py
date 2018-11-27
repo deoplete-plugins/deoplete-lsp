@@ -84,9 +84,16 @@ class Source(Base):
         else:
             items = results
         for rec in items:
+            if len(rec.get('insertText', '')) !=0:
+                if rec.get('insertTextFormat', 0) != 1:
+                    word = rec.get('entryName', rec.get('label'))
+                else:
+                    word = rec['insertText']
+            else:
+                word = rec.get('entryName', rec.get('label'))
+
             item = {
-                'word': re.sub(r'\([^)]*\)', '',
-                               rec.get('entryName', rec.get('label'))),
+                'word': re.sub(r'\([^)]*\)', '', word),
                 'abbr': rec['label'],
                 'dup': 0,
             }
