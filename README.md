@@ -15,4 +15,6 @@ https://github.com/neovim/neovim/pull/6856
 " Use pyls
 call lsp#server#add('python', 'pyls')
 call lsp#server#add('rust', ['rustup', 'run', 'stable', 'rls'])
+call lsp#server#add('go', [expand('$GOPATH/bin/go-langserver'),
+      \ '-format-tool', 'gofmt', '-lint-tool', 'golint', '-gocodecompletion'])
 ```

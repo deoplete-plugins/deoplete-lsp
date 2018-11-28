@@ -59,26 +59,30 @@ class Source(Base):
         self.vim.vars['deoplete#source#lsp#_requested'] = False
         context['is_async'] = True
 
-        location = {
-            # not working sending the buffer
-            # 'textDocument': ''.join(self.vim.current.buffer[:]),
-            'position': {
-                'character': context['complete_position'],
-                'line': self.vim.call('line', '.') - 1,
-            }
-        }
+        params = self.vim.call(
+            'luaeval', 'require("lsp.structures").CompletionParams('
+            '{ position = { character = _A }})',
+            context['complete_position'])
 
         self.vim.call(
             'luaeval', 'require("deoplete").request_candidates('
             '_A.arguments, _A.filetype)',
-            {'arguments': location, 'filetype': context['filetype']})
+            {'arguments': params, 'filetype': context['filetype']})
 
         return []
 
     def process_candidates(self):
         candidates = []
         results = self.vim.vars['deoplete#source#lsp#_results']
-        items = results['items'] if isinstance(results, dict) else results
+        if isinstance(results, dict):
+            if 'items' not in results:
+                self.print_error(
+                    'LSP results does not have "items" key:{}'.format(
+                        str(results)))
+                return
+            items = results['items']
+        else:
+            items = results
         for rec in items:
             item = {
                 'word': re.sub(r'\([^)]*\)', '',
