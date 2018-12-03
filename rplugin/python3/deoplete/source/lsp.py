@@ -25,7 +25,14 @@ LSP_KINDS = [
     'Snippet',
     'Color',
     'File',
-    'Reference'
+    'Reference',
+    'Folder',
+    'EnumMember',
+    'Constant',
+    'Struct',
+    'Event',
+    'Operator',
+    'TypeParameter',
 ]
 
 
