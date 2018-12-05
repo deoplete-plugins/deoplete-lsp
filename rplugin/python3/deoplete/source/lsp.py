@@ -43,7 +43,7 @@ class Source(Base):
         self.name = 'lsp'
         self.mark = '[lsp]'
         self.rank = 500
-        self.input_pattern = r'\.[a-zA-Z0-9_?!]*|[a-zA-Z]\w*::\w*|->\w*'
+        self.input_pattern = r'[^\w\s]$'
         self.vars = {}
         self.vim.vars['deoplete#source#lsp#_results'] = []
         self.vim.vars['deoplete#source#lsp#_success'] = False
