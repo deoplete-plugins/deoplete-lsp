@@ -4,7 +4,7 @@
 ## Install
 
 * Install LSP enabled neovim
-https://github.com/neovim/neovim/pull/6856
+https://github.com/neovim/neovim/pull/10222
 
 * Install the latest deoplete
 
