@@ -50,11 +50,12 @@ class Source(Base):
         self.vim.vars['deoplete#source#lsp#_requested'] = False
 
     def gather_candidates(self, context):
-        if not self.vim.call('exists', '*lsp#server#add'):
+        if not self.vim.call('exists', '*lsp#add_server_config'):
             return []
 
         if not self.vim.call('luaeval',
-                             'require("lsp.plugin").client.has_started()'):
+                             'vim.lsp.client_has_started(_A.filetype)',
+                             {'filetype': context['filetype']}):
             return []
 
         if context['is_async']:
@@ -67,7 +68,7 @@ class Source(Base):
         context['is_async'] = True
 
         params = self.vim.call(
-            'luaeval', 'require("lsp.structures").CompletionParams('
+            'luaeval', 'vim.lsp.protocol.CompletionParams('
             '{ position = { character = _A }})',
             context['complete_position'])
 

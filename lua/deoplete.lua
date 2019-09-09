@@ -4,8 +4,6 @@
 --------------------------------------------------------------------------------
 --
 
-require('lsp.plugin')
-
 local get_candidates = function(success, data)
   vim.api.nvim_set_var('deoplete#source#lsp#_results', data)
   vim.api.nvim_set_var('deoplete#source#lsp#_success', success)
@@ -13,8 +11,8 @@ local get_candidates = function(success, data)
 end
 
 local request_candidates = function(arguments, filetype)
-  vim.lsp.client.request_async('textDocument/completion',
-                               arguments, get_candidates, filetype)
+  vim.lsp.request_async('textDocument/completion',
+                               arguments, get_candidates, nil, filetype)
 end
 
 

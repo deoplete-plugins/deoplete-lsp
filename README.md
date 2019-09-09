@@ -12,16 +12,15 @@ https://github.com/neovim/neovim/pull/10222
 ## Customization
 
 ```vim
-call lsp#server#add('python', 'pyls')
-call lsp#server#add('rust', ['rustup', 'run', 'stable', 'rls'])
+call lsp#add_server_config('python', { 'execute_path': 'pyls', 'args': [] }, {})
+call lsp#add_server_config('rust', { 'execute_path': 'rustup', 'args': ['run', 'stable', 'rls'] }, {})
 
 " For go-langserver
-call lsp#server#add('go', [expand('$GOPATH/bin/go-langserver'),
-      \ '-format-tool', 'gofmt', '-lint-tool', 'golint', '-gocodecompletion'])
+call lsp#add_server_config('go', { 'execute_path': expand('$GOPATH/bin/go-langserver'),
+      \ 'args': ['-format-tool', 'gofmt', '-lint-tool', 'golint', '-gocodecompletion']})
 
 " For bingo
 " https://github.com/saibing/bingo
-call lsp#server#add('go', [
-      \ 'bingo', '--mode', 'stdio', '--logfile', '/tmp/lspserver.log',
-      \ '--trace', '--pprof', ':6060'])
+call lsp#add_server_config('go', { 'execute_path': 'bingo',
+      \ 'args': ['--mode', 'stdio', '--logfile', '/tmp/lspserver.log', '--trace', '--pprof', ':6060']})
 ```
