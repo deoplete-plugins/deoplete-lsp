@@ -58,14 +58,10 @@ class Source(Base):
                              {'filetype': context['filetype']}):
             return []
 
-        if context['is_async']:
-            if self.vim.vars['deoplete#source#lsp#_requested']:
-                context['is_async'] = False
-                return self.process_candidates()
-            return []
+        if self.vim.vars['deoplete#source#lsp#_requested']:
+            return self.process_candidates()
 
         self.vim.vars['deoplete#source#lsp#_requested'] = False
-        context['is_async'] = True
 
         params = self.vim.call(
             'luaeval', 'vim.lsp.protocol.CompletionParams('
