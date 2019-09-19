@@ -44,10 +44,12 @@ class Source(Base):
         self.mark = '[lsp]'
         self.rank = 500
         self.input_pattern = r'[^\w\s]$'
+        self.is_volatile = True
         self.vars = {}
         self.vim.vars['deoplete#source#lsp#_results'] = []
         self.vim.vars['deoplete#source#lsp#_success'] = False
         self.vim.vars['deoplete#source#lsp#_requested'] = False
+        self.vim.vars['deoplete#source#lsp#_prev_input'] = ''
 
     def gather_candidates(self, context):
         if not self.vim.call('exists', '*lsp#add_server_config'):
@@ -58,10 +60,16 @@ class Source(Base):
                              {'filetype': context['filetype']}):
             return []
 
-        if self.vim.vars['deoplete#source#lsp#_requested']:
+        self.vim.call('deoplete#util#print_debug', context['event'])
+        self.vim.call('deoplete#util#print_debug', context['input'])
+        prev_input = self.vim.vars['deoplete#source#lsp#_prev_input']
+        if context['input'] == prev_input and self.vim.vars[
+                'deoplete#source#lsp#_requested']:
+            self.vim.call('deoplete#util#print_debug', context['input'])
             return self.process_candidates()
 
         self.vim.vars['deoplete#source#lsp#_requested'] = False
+        self.vim.vars['deoplete#source#lsp#_prev_input'] = context['input']
 
         params = self.vim.call(
             'luaeval', 'vim.lsp.protocol.CompletionParams('
