@@ -60,8 +60,6 @@ class Source(Base):
                              {'filetype': context['filetype']}):
             return []
 
-        self.vim.call('deoplete#util#print_debug', context['event'])
-        self.vim.call('deoplete#util#print_debug', context['input'])
         prev_input = self.vim.vars['deoplete#source#lsp#_prev_input']
         if context['input'] == prev_input and self.vim.vars[
                 'deoplete#source#lsp#_requested']:
