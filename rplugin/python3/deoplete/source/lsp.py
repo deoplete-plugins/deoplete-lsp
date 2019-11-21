@@ -52,7 +52,7 @@ class Source(Base):
         self.vim.vars['deoplete#source#lsp#_prev_input'] = ''
 
     def gather_candidates(self, context):
-        if not self.vim.call('exists', '*lsp#add_filetype_config'):
+        if not self.vim.call('has', 'nvim-0.5.0'):
             return []
 
         prev_input = self.vim.vars['deoplete#source#lsp#_prev_input']
