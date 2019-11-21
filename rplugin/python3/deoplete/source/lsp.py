@@ -52,12 +52,7 @@ class Source(Base):
         self.vim.vars['deoplete#source#lsp#_prev_input'] = ''
 
     def gather_candidates(self, context):
-        if not self.vim.call('exists', '*lsp#add_server_config'):
-            return []
-
-        if not self.vim.call('luaeval',
-                             'vim.lsp.client_has_started(_A.filetype)',
-                             {'filetype': context['filetype']}):
+        if not self.vim.call('exists', '*lsp#add_filetype_config'):
             return []
 
         prev_input = self.vim.vars['deoplete#source#lsp#_prev_input']
@@ -70,14 +65,13 @@ class Source(Base):
         self.vim.vars['deoplete#source#lsp#_prev_input'] = context['input']
 
         params = self.vim.call(
-            'luaeval', 'vim.lsp.protocol.CompletionParams('
-            '{ position = { character = _A }})',
-            context['complete_position'])
+            'luaeval',
+            'vim.lsp.protocol.make_text_document_position_params()')
 
         self.vim.call(
             'luaeval', 'require("deoplete").request_candidates('
-            '_A.arguments, _A.filetype)',
-            {'arguments': params, 'filetype': context['filetype']})
+            '_A.arguments)',
+            {'arguments': params})
 
         return []
 
