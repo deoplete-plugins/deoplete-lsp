@@ -66,7 +66,7 @@ class Source(Base):
 
         params = self.vim.call(
             'luaeval',
-            'vim.lsp.protocol.make_text_document_position_params()')
+            'vim.lsp.util.make_position_params()')
 
         self.vim.call(
             'luaeval', 'require("deoplete").request_candidates('
