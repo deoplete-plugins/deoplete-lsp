@@ -58,7 +58,6 @@ class Source(Base):
         prev_input = self.vim.vars['deoplete#source#lsp#_prev_input']
         if context['input'] == prev_input and self.vim.vars[
                 'deoplete#source#lsp#_requested']:
-            self.vim.call('deoplete#util#print_debug', context['input'])
             return self.process_candidates()
 
         self.vim.vars['deoplete#source#lsp#_requested'] = False
@@ -78,11 +77,12 @@ class Source(Base):
     def process_candidates(self):
         candidates = []
         results = self.vim.vars['deoplete#source#lsp#_results']
-        if isinstance(results, dict):
+        if not results:
+            return
+        elif isinstance(results, dict):
             if 'items' not in results:
                 self.print_error(
-                    'LSP results does not have "items" key:{}'.format(
-                        str(results)))
+                    'LSP results does not have "items" key:{}'.format(str(results)))
                 return
             items = results['items']
         else:
