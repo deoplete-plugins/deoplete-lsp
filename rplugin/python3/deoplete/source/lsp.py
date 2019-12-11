@@ -4,6 +4,7 @@
 # =============================================================================
 
 import re
+import json
 
 from deoplete.source.base import Base
 
@@ -97,7 +98,7 @@ class Source(Base):
                 word = rec.get('entryName', rec.get('label'))
 
             item = {
-                'word': re.sub(r'\([^)]*\)', '', word),
+                'word': word,
                 'abbr': rec['label'],
                 'dup': 0,
             }
@@ -106,7 +107,19 @@ class Source(Base):
                 item['kind'] = LSP_KINDS[rec['kind'] - 1]
 
             if 'detail' in rec and rec['detail']:
-                item['info'] = rec['detail']
+                item['menu'] = rec['detail']
+
+            if 'documentation' in rec and isinstance(rec['documentation'], str):
+                item['info'] = rec['documentation']
+            elif 'documentation' in rec and isinstance(rec['documentation'], dict) and 'value' in rec['documentation']:
+                item['info'] = rec['documentation']['value']
+
+            if 'insertTextFormat' in rec and rec['insertTextFormat'] == 2:
+                item['user_data'] = json.dumps({
+                    'snippet': word,
+                    'snippet_trigger': word
+                })
+                item['kind'] = 'snippet'
 
             candidates.append(item)
 
