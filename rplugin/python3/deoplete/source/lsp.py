@@ -101,6 +101,9 @@ class Source(Base):
                 'word': word,
                 'abbr': rec['label'],
                 'dup': 0,
+                'user_data': json.dumps({
+                    'lspitem': rec
+                })
             }
 
             if 'kind' in rec:
@@ -115,11 +118,7 @@ class Source(Base):
                 item['info'] = rec['documentation']['value']
 
             if 'insertTextFormat' in rec and rec['insertTextFormat'] == 2:
-                item['user_data'] = json.dumps({
-                    'snippet': word,
-                    'snippet_trigger': word
-                })
-                item['kind'] = 'snippet'
+                item['kind'] = 'Snippet'
 
             candidates.append(item)
 
