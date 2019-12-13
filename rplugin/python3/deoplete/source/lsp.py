@@ -102,9 +102,7 @@ class Source(Base):
                 'abbr': rec['label'],
                 'dup': 0,
                 'user_data': json.dumps({
-                    'deoplete_lsp': {
-                        'item': rec
-                    }
+                    'lspitem': rec
                 })
             }
 
