@@ -3,10 +3,9 @@
 # AUTHOR: Shougo Matsushita <Shougo.Matsu at gmail.com>
 # =============================================================================
 
-import re
 import json
-
 from deoplete.source.base import Base
+
 
 LSP_KINDS = [
     'Text',
@@ -106,18 +105,18 @@ class Source(Base):
                 })
             }
 
-            if 'kind' in rec:
+            if isinstance(rec.get('kind'), int):
                 item['kind'] = LSP_KINDS[rec['kind'] - 1]
 
-            if 'detail' in rec and rec['detail']:
+            if rec.get('detail'):
                 item['menu'] = rec['detail']
 
-            if 'documentation' in rec and isinstance(rec['documentation'], str):
+            if isinstance(rec.get('documentation'), str):
                 item['info'] = rec['documentation']
-            elif 'documentation' in rec and isinstance(rec['documentation'], dict) and 'value' in rec['documentation']:
+            elif isinstance(rec.get('documentation'), dict) and 'value' in rec['documentation']:
                 item['info'] = rec['documentation']['value']
 
-            if 'insertTextFormat' in rec and rec['insertTextFormat'] == 2:
+            if rec.get('insertTextFormat') == 2:
                 item['kind'] = 'Snippet'
 
             candidates.append(item)
