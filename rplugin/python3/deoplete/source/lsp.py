@@ -89,7 +89,7 @@ class Source(Base):
             items = results
         for rec in items:
             if rec.get('insertText', ''):
-                if rec.get('insertTextFormat', 0) != 1:
+                if rec.get('insertTextFormat', 1) != 1:
                     word = rec.get('entryName', rec.get('label'))
                 else:
                     word = rec['insertText']
