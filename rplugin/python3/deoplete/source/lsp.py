@@ -88,7 +88,9 @@ class Source(Base):
         else:
             items = results
         for rec in items:
-            if rec.get('insertText', ''):
+            if 'textEdit' in rec:
+                word = rec['textEdit']['newText']
+            elif rec.get('insertText', ''):
                 if rec.get('insertTextFormat', 1) != 1:
                     word = rec.get('entryName', rec.get('label'))
                 else:
@@ -99,7 +101,7 @@ class Source(Base):
             item = {
                 'word': word,
                 'abbr': rec['label'],
-                'dup': 0,
+                'dup': 1,
                 'user_data': json.dumps({
                     'lspitem': rec
                 })
