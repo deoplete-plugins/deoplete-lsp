@@ -88,7 +88,7 @@ class Source(Base):
         else:
             items = results
         for rec in items:
-            if 'textEdit' in rec:
+            if 'textEdit' in rec and rec['textEdit'] is not None:
                 word = rec['textEdit']['newText']
             elif rec.get('insertText', ''):
                 if rec.get('insertTextFormat', 1) != 1:
