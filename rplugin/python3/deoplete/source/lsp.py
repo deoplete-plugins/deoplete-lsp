@@ -68,7 +68,7 @@ class Source(Base):
             'vim.lsp.util.make_position_params()')
 
         self.vim.call(
-            'luaeval', 'require("deoplete").request_candidates('
+            'luaeval', 'require("candidates").request_candidates('
             '_A.arguments)',
             {'arguments': params})
 
