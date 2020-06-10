@@ -89,7 +89,13 @@ class Source(Base):
             items = results
         for rec in items:
             if 'textEdit' in rec and rec['textEdit'] is not None:
-                word = rec['textEdit']['newText']
+                textEdit = rec['textEdit']
+                if textEdit['range']['start'] == textEdit['range']['end']:
+                    previous_input = self.vim.vars['deoplete#source#lsp#_prev_input']
+                    new_text = textEdit['newText']
+                    word = f'{previous_input}{new_text}'
+                else:
+                    word = textEdit['newText']
             elif rec.get('insertText', ''):
                 if rec.get('insertTextFormat', 1) != 1:
                     word = rec.get('entryName', rec.get('label'))
