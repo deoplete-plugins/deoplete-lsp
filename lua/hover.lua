@@ -52,7 +52,7 @@ local create_window = function(method, result)
 
     hover_buffer, hover_window = util.fancy_floating_markdown(markdown_lines, {
       pad_left = 1; pad_right = 1;
-      col = complete_display_info['col']; width = complete_display_info['width']; row = 0;
+      col = complete_display_info['col']; width = complete_display_info['width']; row = vim.fn.winline();
       align = alignment;
     })
 
