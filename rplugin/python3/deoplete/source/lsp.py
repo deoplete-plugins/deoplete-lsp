@@ -60,8 +60,11 @@ class Source(Base):
                 'deoplete#source#lsp#_requested']:
             return self.process_candidates()
 
-        self.vim.vars['deoplete#source#lsp#_requested'] = False
-        self.vim.vars['deoplete#source#lsp#_prev_input'] = context['input']
+        vars = self.vim.vars
+        vars['deoplete#source#lsp#_requested'] = False
+        vars['deoplete#source#lsp#_prev_input'] = context['input']
+        vars['deoplete#source#lsp#_complete_position'] = context[
+            'complete_position']
 
         params = self.vim.call(
             'luaeval',
@@ -76,13 +79,15 @@ class Source(Base):
 
     def process_candidates(self):
         candidates = []
-        results = self.vim.vars['deoplete#source#lsp#_results']
+        vars = self.vim.vars
+        results = vars['deoplete#source#lsp#_results']
         if not results:
             return
         elif isinstance(results, dict):
             if 'items' not in results:
                 self.print_error(
-                    'LSP results does not have "items" key:{}'.format(str(results)))
+                    'LSP results does not have "items" key:{}'.format(
+                        str(results)))
                 return
             items = results['items']
         else:
@@ -91,9 +96,11 @@ class Source(Base):
             if 'textEdit' in rec and rec['textEdit'] is not None:
                 textEdit = rec['textEdit']
                 if textEdit['range']['start'] == textEdit['range']['end']:
-                    previous_input = self.vim.vars['deoplete#source#lsp#_prev_input']
+                    previous_input = vars['deoplete#source#lsp#_prev_input']
+                    complete_position = vars[
+                        'deoplete#source#lsp#_complete_position']
                     new_text = textEdit['newText']
-                    word = f'{previous_input}{new_text}'
+                    word = f'{previous_input[complete_position:]}{new_text}'
                 else:
                     word = textEdit['newText']
             elif rec.get('insertText', ''):
@@ -121,7 +128,8 @@ class Source(Base):
 
             if isinstance(rec.get('documentation'), str):
                 item['info'] = rec['documentation']
-            elif isinstance(rec.get('documentation'), dict) and 'value' in rec['documentation']:
+            elif (isinstance(rec.get('documentation'), dict) and
+                  'value' in rec['documentation']):
                 item['info'] = rec['documentation']['value']
 
             if rec.get('insertTextFormat') == 2:
