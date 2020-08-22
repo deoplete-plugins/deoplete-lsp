@@ -132,9 +132,6 @@ class Source(Base):
                   'value' in rec['documentation']):
                 item['info'] = rec['documentation']['value']
 
-            if rec.get('insertTextFormat') == 2:
-                item['kind'] = 'Snippet'
-
             candidates.append(item)
 
         return candidates
