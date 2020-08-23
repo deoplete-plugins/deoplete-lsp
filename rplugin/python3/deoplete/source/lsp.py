@@ -128,6 +128,8 @@ class Source(Base):
 
             if isinstance(rec.get('kind'), int):
                 item['kind'] = LSP_KINDS[rec['kind'] - 1]
+            elif rec.get('insertTextFormat') == 2:
+                item['kind'] = 'Snippet'
 
             if rec.get('detail'):
                 item['menu'] = rec['detail']
