@@ -115,7 +115,7 @@ class Source(Base):
 
             # Remove parentheses from word.
             # Note: some LSP includes snippet parentheses in word(newText)
-            word = re.sub(r'\(.*\)(\$\d+)?', '', word)
+            word = re.sub(r'[\(|<].*[\)|>](\$\d+)?', '', word)
 
             item = {
                 'word': word,
