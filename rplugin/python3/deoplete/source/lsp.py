@@ -120,7 +120,7 @@ class Source(Base):
             item = {
                 'word': word,
                 'abbr': rec['label'],
-                'dup': 1,
+                'dup': 0,
                 'user_data': json.dumps({
                     'lspitem': rec
                 })
