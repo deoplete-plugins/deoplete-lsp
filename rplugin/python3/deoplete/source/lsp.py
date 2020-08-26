@@ -113,10 +113,6 @@ class Source(Base):
             else:
                 word = rec.get('entryName', rec.get('label'))
 
-            # Remove parentheses from word.
-            # Note: some LSP includes snippet parentheses in word(newText)
-            word = re.sub(r'[\(|<].*[\)|>](\$\d+)?', '', word)
-
             item = {
                 'word': word,
                 'abbr': rec['label'],
