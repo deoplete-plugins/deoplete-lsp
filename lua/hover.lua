@@ -151,7 +151,7 @@ local insert_enter_handler = function()
 end
 
 local insert_leave_handler = function()
-  hover = hover_initialise
+  hover.insert_mode = false
 end
 
 return {
