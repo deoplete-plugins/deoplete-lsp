@@ -7,7 +7,7 @@
 local vim = vim
 local api = vim.api
 local feature = 'textDocument/hover'
-local default_response_handler = vim.lsp.callbacks[feature]
+local default_response_handler = vim.lsp.handlers[feature]
 
 local hover_initialise = {
   buffer_changes = 0,
@@ -75,10 +75,10 @@ end
 
 local set_response_handler = function()
   for _, client in pairs(vim.lsp.buf_get_clients(0)) do
-    local current_response_handler = client.config.callbacks[feature] or default_response_handler
+    local current_response_handler = client.config.handlers[feature] or default_response_handler
     if current_response_handler == handle_response then return end
 
-    client.config.callbacks[feature] = handle_response
+    client.config.handlers[feature] = handle_response
   end
 end
 
