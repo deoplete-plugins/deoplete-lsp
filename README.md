@@ -10,3 +10,8 @@
 * Install and configure nvim-lsp
 
 https://github.com/neovim/nvim-lsp
+
+## Configuration
+
+* `g:deoplete#lsp#handler_enabled`: If you set it to v:false, you can disable
+  hover handler.
