@@ -81,8 +81,7 @@ class Source(Base):
         self.vim.vars['deoplete#source#lsp#_requested'] = False
         self.vim.vars['deoplete#source#lsp#_prev_input'] = ''
 
-        use_icons = vim.eval('g:deoplete#lsp#use_icons_for_candidates')
-        self.lsp_kinds = LSP_KINDS_WITH_ICONS if use_icons else LSP_KINDS
+        self.lsp_kinds = LSP_KINDS
 
     def gather_candidates(self, context):
         if not self.vim.call('has', 'nvim-0.5.0'):
@@ -114,6 +113,7 @@ class Source(Base):
         candidates = []
         vars = self.vim.vars
         results = vars['deoplete#source#lsp#_results']
+
         if not results:
             return
         elif isinstance(results, dict):
@@ -125,6 +125,11 @@ class Source(Base):
             items = results['items']
         else:
             items = results
+
+        use_icons = vars['deoplete#lsp#use_icons_for_candidates']
+        if use_icons:
+            self.lsp_kinds = LSP_KINDS_WITH_ICONS
+
         for rec in items:
             if 'textEdit' in rec and rec['textEdit'] is not None:
                 textEdit = rec['textEdit']

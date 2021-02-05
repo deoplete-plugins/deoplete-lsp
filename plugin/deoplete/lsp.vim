@@ -14,6 +14,9 @@ if get(g:, 'deoplete#enable_at_startup', 0)
   call deoplete#lsp#enable()
 endif
 
-let g:completion_docked_hover = get(g:, 'completion_docked_hover', 0)
-let g:completion_docked_maximum_size = get(g:, 'completion_docked_maximum_size', 10)
-let g:completion_docked_minimum_size = get(g:, 'completion_docked_minimum_size', 3)
+let g:completion_docked_hover = get(
+      \ g:, 'completion_docked_hover', 0)
+let g:completion_docked_maximum_size = get(
+      \ g:, 'completion_docked_maximum_size', 10)
+let g:completion_docked_minimum_size = get(
+      \ g:, 'completion_docked_minimum_size', 3)
