@@ -10,6 +10,34 @@ from deoplete.source.base import Base
 
 
 LSP_KINDS = [
+    'Text',
+    'Method',
+    'Function',
+    'Constructor',
+    'Field',
+    'Variable',
+    'Class',
+    'Interface',
+    'Module',
+    'Property',
+    'Unit',
+    'Value',
+    'Enum',
+    'Keyword',
+    'Snippet',
+    'Color',
+    'File',
+    'Reference',
+    'Folder',
+    'EnumMember',
+    'Constant',
+    'Struct',
+    'Event',
+    'Operator',
+    'TypeParameter',
+]
+
+LSP_KINDS_WITH_ICONS = [
     ' [text]     ',
     ' [method]   ',
     ' [function] ',
@@ -47,6 +75,7 @@ class Source(Base):
         self.rank = 500
         self.input_pattern = r'[^\w\s]$'
         self.is_volatile = True
+        self.labels = LSP_KINDS_WITH_ICONS if vim.eval('g:deoplete#lsp#use_icons_for_candidates') else LSP_KINDS
         self.vars = {}
         self.vim.vars['deoplete#source#lsp#_results'] = []
         self.vim.vars['deoplete#source#lsp#_success'] = False
@@ -127,7 +156,7 @@ class Source(Base):
             }
 
             if isinstance(rec.get('kind'), int):
-                item['kind'] = LSP_KINDS[rec['kind'] - 1]
+                item['kind'] = self.labels[rec['kind'] - 1]
             elif rec.get('insertTextFormat') == 2:
                 item['kind'] = 'Snippet'
 
