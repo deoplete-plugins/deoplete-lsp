@@ -37,6 +37,34 @@ LSP_KINDS = [
     'TypeParameter',
 ]
 
+LSP_KINDS_WITH_ICONS = [
+    ' [text]     ',
+    ' [method]   ',
+    ' [function] ',
+    ' [constructor]',
+    'ﰠ [field]    ',
+    '𝒙 [variable] ',
+    ' [class]    ',
+    ' [interface]',
+    ' [module]   ',
+    ' [property] ',
+    ' [unit]     ',
+    ' [value]    ',
+    ' [enum]     ',
+    ' [key]      ',
+    '﬌ [snippet]  ',
+    ' [color]    ',
+    ' [file]     ',
+    ' [refrence] ',
+    ' [folder]   ',
+    ' [enumMember]',
+    ' [constant] ',
+    ' [struct]   ',
+    ' [event]    ',
+    ' [operator] ',
+    ' [typeParameter]',
+]
+
 
 class Source(Base):
     def __init__(self, vim):
@@ -52,6 +80,9 @@ class Source(Base):
         self.vim.vars['deoplete#source#lsp#_success'] = False
         self.vim.vars['deoplete#source#lsp#_requested'] = False
         self.vim.vars['deoplete#source#lsp#_prev_input'] = ''
+
+        use_icons = vim.eval('g:deoplete#lsp#use_icons_for_candidates')
+        self.lsp_kinds = LSP_KINDS_WITH_ICONS if use_icons else LSP_KINDS
 
     def gather_candidates(self, context):
         if not self.vim.call('has', 'nvim-0.5.0'):
@@ -127,7 +158,7 @@ class Source(Base):
             }
 
             if isinstance(rec.get('kind'), int):
-                item['kind'] = LSP_KINDS[rec['kind'] - 1]
+                item['kind'] = self.lsp_kinds[rec['kind'] - 1]
             elif rec.get('insertTextFormat') == 2:
                 item['kind'] = 'Snippet'
 
