@@ -75,12 +75,14 @@ class Source(Base):
         self.rank = 500
         self.input_pattern = r'[^\w\s]$'
         self.is_volatile = True
-        self.labels = LSP_KINDS_WITH_ICONS if vim.eval('g:deoplete#lsp#use_icons_for_candidates') else LSP_KINDS
         self.vars = {}
         self.vim.vars['deoplete#source#lsp#_results'] = []
         self.vim.vars['deoplete#source#lsp#_success'] = False
         self.vim.vars['deoplete#source#lsp#_requested'] = False
         self.vim.vars['deoplete#source#lsp#_prev_input'] = ''
+
+        use_icons = vim.eval('g:deoplete#lsp#use_icons_for_candidates')
+        self.lsp_kinds = LSP_KINDS_WITH_ICONS if use_icons else LSP_KINDS
 
     def gather_candidates(self, context):
         if not self.vim.call('has', 'nvim-0.5.0'):
@@ -156,7 +158,7 @@ class Source(Base):
             }
 
             if isinstance(rec.get('kind'), int):
-                item['kind'] = self.labels[rec['kind'] - 1]
+                item['kind'] = self.lsp_kinds[rec['kind'] - 1]
             elif rec.get('insertTextFormat') == 2:
                 item['kind'] = 'Snippet'
 
