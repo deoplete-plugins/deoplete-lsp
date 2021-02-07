@@ -11,10 +11,6 @@ if !exists('s:is_handler_enabled')
   let s:is_handler_enabled = v:false
 endif
 
-if !exists('g:deoplete#lsp#use_icons_for_candidates')
-  let g:deoplete#lsp#use_icons_for_candidates = v:false
-endif
-
 function! deoplete#lsp#init#_is_handler_enabled() abort
   return s:is_handler_enabled
 endfunction

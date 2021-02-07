@@ -80,6 +80,8 @@ class Source(Base):
         self.vim.vars['deoplete#source#lsp#_success'] = False
         self.vim.vars['deoplete#source#lsp#_requested'] = False
         self.vim.vars['deoplete#source#lsp#_prev_input'] = ''
+        if 'deoplete#lsp#use_icons_for_candidates' not in self.vim.vars:
+            self.vim.vars['deoplete#lsp#use_icons_for_candidates'] = False
 
         self.lsp_kinds = LSP_KINDS
 
