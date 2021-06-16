@@ -135,7 +135,8 @@ class Source(Base):
         for rec in items:
             if 'textEdit' in rec and rec['textEdit'] is not None:
                 textEdit = rec['textEdit']
-                if textEdit['range']['start'] == textEdit['range']['end']:
+                if ('range' in textEdit and textEdit['range']['start'] ==
+                        textEdit['range']['end']):
                     previous_input = vars['deoplete#source#lsp#_prev_input']
                     complete_position = vars[
                         'deoplete#source#lsp#_complete_position']
