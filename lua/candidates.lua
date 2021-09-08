@@ -9,7 +9,8 @@ local api = vim.api
 local get_candidates = function(_, arg1, arg2)
   -- For neovim 0.6 breaking changes
   -- https://github.com/neovim/neovim/pull/15504
-  local result = vim.fn.has('nvim-0.6') == 1 and arg1 or arg2
+  local result = (vim.fn.has('nvim-0.6') == 1
+                  and type(arg1) == 'table' and arg1 or arg2)
   if not result or result == 0 then
     return
   end
