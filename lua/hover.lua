@@ -75,7 +75,7 @@ end
 
 local set_response_handler = function()
   for _, client in pairs(vim.lsp.buf_get_clients(0)) do
-    local current_response_handler = client.config.handlers[feature] or default_response_handler
+    local current_response_handler = (client.config and client.config.handlers[feature]) or default_response_handler
     if current_response_handler == handle_response then return end
 
     client.config.handlers[feature] = handle_response
