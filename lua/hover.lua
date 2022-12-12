@@ -92,8 +92,8 @@ local decode_user_data = function(user_data)
 end
 
 local client_with_hover = function()
-  for _, value in pairs(vim.lsp.buf_get_clients(0)) do
-    if value.resolved_capabilities.hover == false then return false end
+  for _, client in pairs(vim.lsp.buf_get_clients(0)) do
+    if client.server_capabilities().hoverProvider == false then return false end
   end
 
   return true
