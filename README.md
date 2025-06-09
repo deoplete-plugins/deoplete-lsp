@@ -1,5 +1,14 @@
 # LSP Completion source for deoplete
 
+**Note**: The development of this plugin is finished. Accepts minor patches and
+issues but no new features.  And the plugin does not support the latest
+nvim-lsp specification.
+
+[ddc.vim](https://github.com/Shougo/ddc.vim) with
+[ddc-source-lsp](https://github.com/Shougo/ddc-source-lsp) is the next
+generation auto completion plugin. Consider migrating to it.
+
+
 ## Install
 
 - Install LSP enabled [neovim](https://github.com/neovim/neovim)(version 0.5.0+)
