@@ -102,9 +102,20 @@ class Source(Base):
 
         # Note: request_candidates() may be failed
         try:
+            offset_encoding = self.vim.call(
+                'luaeval',
+                '''
+                local c = vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })[1]
+                return c and c.offset_encoding or "utf-16"
+                '''
+            )
+
+            # NOTE: offset_encoding is needed for Nevim 0.10
             params = self.vim.call(
                 'luaeval',
-                'vim.lsp.util.make_position_params()')
+                'vim.lsp.util.make_position_params(0, _A)',
+                offset_encoding,
+            )
 
             self.vim.call(
                 'luaeval', 'require("candidates").request_candidates('
